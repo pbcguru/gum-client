@@ -29,13 +29,19 @@ class GumClient
      * Register a user with GUM (create or find by email).
      * Returns: ['gum_user_id' => int, 'created' => bool, 'email' => string, ...]
      */
-    public function registerUser(string $email, string $name, ?string $lastName = null): ?array
+    public function registerUser(string $email, string $name, ?string $lastName = null, ?string $passwordHash = null): ?array
     {
-        return $this->post('users', [
+        $data = [
             'email' => $email,
             'name' => $name,
             'last_name' => $lastName,
-        ]);
+        ];
+
+        if ($passwordHash) {
+            $data['password_hash'] = $passwordHash;
+        }
+
+        return $this->post('users', $data);
     }
 
     /**

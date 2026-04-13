@@ -12,6 +12,7 @@ class GumClient
     protected Client $http;
     protected string $apiKey;
     protected string $jwtSecret;
+    protected string $service;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class GumClient
 
         $this->apiKey = config('gum.api_key');
         $this->jwtSecret = config('gum.jwt_secret');
+        $this->service = config('gum.service');
     }
 
     /**
@@ -35,6 +37,7 @@ class GumClient
             'email' => $email,
             'name' => $name,
             'last_name' => $lastName,
+            'service' => $this->service,
         ];
 
         if ($passwordHash) {
@@ -53,6 +56,7 @@ class GumClient
         return $this->post('auth/login', [
             'email' => $email,
             'password' => $password,
+            'service' => $this->service,
         ]);
     }
 

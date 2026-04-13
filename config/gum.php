@@ -5,4 +5,5 @@ return [
     'api_key' => env('GUM_API_KEY'),
     'jwt_secret' => env('GUM_JWT_SECRET'),
     'verify_ssl' => env('GUM_VERIFY_SSL', true),
+    'service' => env('GUM_SERVICE_REGISTRY'),
 ];

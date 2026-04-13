@@ -122,6 +122,15 @@ class GumClient
         return $this->put("users/{$gumUserId}", $data);
     }
 
+    /**
+     * Remove a user's enrollment from the current service.
+     * Does NOT delete the user — just removes the service enrollment.
+     */
+    public function unenroll(int $gumUserId): ?array
+    {
+        return $this->delete("users/{$gumUserId}/enroll/{$this->service}");
+    }
+
     protected function post(string $endpoint, array $data): ?array
     {
         try {
@@ -147,6 +156,25 @@ class GumClient
     {
         try {
             $response = $this->http->get("v1/{$endpoint}", [
+                'headers' => [
+                    'X-API-Key' => $this->apiKey,
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return json_decode($e->getResponse()->getBody()->getContents(), true);
+            }
+            return null;
+        }
+    }
+
+    protected function delete(string $endpoint): ?array
+    {
+        try {
+            $response = $this->http->delete("v1/{$endpoint}", [
                 'headers' => [
                     'X-API-Key' => $this->apiKey,
                     'Accept' => 'application/json',
